@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FallingNothing.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -21,6 +22,7 @@ public class Game1 : Game
 
     public Random Random = new Random();
 
+
     public Game1()
     {
         Graphics = new GraphicsDeviceManager(this);
@@ -28,6 +30,9 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         Instance = this;
+
+        IsFixedTimeStep = false;
+        Graphics.SynchronizeWithVerticalRetrace = false;
     }
 
     protected override void Initialize()
@@ -40,8 +45,6 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         SpriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
@@ -54,7 +57,7 @@ public class Game1 : Game
         InputManager.Update();
         GameManager.Update();
 
-        base.Update(gameTime);
+        Utils.UpdateFps(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -63,8 +66,6 @@ public class Game1 : Game
 
         GameManager.Draw();
 
-        base.Draw(gameTime);
+        UIManager.Draw(SpriteBatch);
     }
-
-    public static bool NextBool(int chance) => Instance.Random.Next(chance) == 0;
 }

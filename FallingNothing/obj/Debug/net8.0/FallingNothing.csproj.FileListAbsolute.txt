@@ -24,3 +24,4 @@ D:\Workspace\Projects\Coding\MonoGame\FallingNothing\FallingNothing\obj\Debug\ne
 D:\Workspace\Projects\Coding\MonoGame\FallingNothing\FallingNothing\obj\Debug\net8.0\FallingNothing.pdb
 D:\Workspace\Projects\Coding\MonoGame\FallingNothing\FallingNothing\obj\Debug\net8.0\FallingNothing.genruntimeconfig.cache
 D:\Workspace\Projects\Coding\MonoGame\FallingNothing\FallingNothing\obj\Debug\net8.0\ref\FallingNothing.dll
+D:\Workspace\Projects\Coding\MonoGame\FallingNothing\FallingNothing\bin\Debug\net8.0\Content\Fonts\font1.xnb

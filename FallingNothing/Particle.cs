@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace FallingNothing
@@ -13,8 +9,13 @@ namespace FallingNothing
 
     public struct Particle
     {
-        public Color Color = Color.Transparent;
-        public Material Material = Material.Air;
+        public Color Color;
+        public Material Material;
+
+        public Particle()
+        {
+            this = new Particle(Material.Air);
+        }
 
         public Particle(Material material)
         {
@@ -23,6 +24,7 @@ namespace FallingNothing
             switch (material)
             {
                 case Material.Air:
+                    Color = Color.Transparent;
                     break;
                 case Material.Sand:
                     Color = Color.Goldenrod;

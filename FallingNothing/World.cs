@@ -1,8 +1,10 @@
+using FallingNothing.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace FallingNothing
 {
@@ -23,29 +25,45 @@ namespace FallingNothing
 
         public void UpdateMap()
         {
-            for (int y = Height - 1; y >= 0; y--)
+            Parallel.For(0, Width, x =>
             {
-                for (int x = 0; x < Width; x++)
+                for (int y = Height - 1; y >= 0; y--)
                 {
                     UpdateParticleAt(x, y);
                 }
-            }
+            });
+
+
+            //for (int y = Height - 1; y >= 0; y--)
+            //{
+            //    // Randomise the X update direction to prevent bias
+            //    //if (Utils.NextBool(2)) // Update X left to right
+            //    //{
+            //    //    for (int x = 0; x < Width; x++)
+            //    //        UpdateParticleAt(x, y);
+            //    //}
+            //    //else // Update X right to left
+            //    //{
+            //    //    for (int x = Width - 1; x >= 0; x--)
+            //    //        UpdateParticleAt(x, y);
+            //    //}  
+            //}
         }
 
         public void RenderMap()
         {
             mapTexture ??= new Texture2D(Game1.Instance.GraphicsDevice, Width, Height);
-            List<Color> data = new List<Color>();
+            Color[] data = new Color[Width * Height];
 
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    data.Add(Map[x, y].Color);
+                    data[y * Width + x] = Map[x, y].Color;
                 }
             }
 
-            mapTexture.SetData(data.ToArray());
+            mapTexture.SetData(data);
         }
 
         public void DrawMap()
@@ -87,16 +105,19 @@ namespace FallingNothing
 
         private void ParticleFallUpdate(int x, int y)
         {
-            bool belowAvailable = y < Height - 1 && Map[x, y + 1].Material is Material.Air;
-            bool belowLeftAvailable = y < Height - 1 && x > 0 && Map[x - 1, y + 1].Material is Material.Air;
-            bool belowRightAvailable = y < Height - 1 && x < Width - 1 && Map[x + 1, y + 1].Material is Material.Air;
+            if (y >= Height - 1)
+                return;
+
+            bool belowAvailable = Map[x, y + 1].Material == Material.Air;
+            bool belowLeftAvailable = x > 0 && Map[x - 1, y + 1].Material == Material.Air;
+            bool belowRightAvailable = x < Width - 1 && Map[x + 1, y + 1].Material == Material.Air;
 
             int xOffset = 0; int yOffset = 0;
 
             if (belowAvailable)
                 yOffset = 1;
             else if (belowLeftAvailable && belowRightAvailable)
-                xOffset += Game1.NextBool(2) ? -1 : 1;
+                xOffset += Utils.NextBool(2) ? -1 : 1;
             else if (belowLeftAvailable)
             {
                 yOffset = 1;
@@ -108,7 +129,8 @@ namespace FallingNothing
                 xOffset = 1;
             }
 
-            MoveParticle(x, y, x + xOffset, y + yOffset);
+            if (xOffset != 0 || yOffset != 0)
+                MoveParticle(x, y, x + xOffset, y + yOffset);
         }
 
 
